@@ -414,19 +414,18 @@ int comparePositions(const void* a, const void* b) {
     return 0;
 }
 
-void printAllPositions(WorkersData* data) {
+PositionStats* createPositionsStats(WorkersData* data, int* stats_count) {
+    *stats_count = 0;
     if (data->workers_count == 0) {
-        printf("Нет данных о работниках!\n");
-        return;
+        return NULL;
     }
 
     PositionStats* stats = NULL;
-    int stats_count = 0;
     int stats_capacity = 10;
     stats = (PositionStats*)malloc(stats_capacity * sizeof(PositionStats));
     if (stats == NULL) {
         printf("Ошибка выделения памяти!\n");
-        return;
+        return NULL;
     }
 
     // Собираем статистику по всем контрактам всех работников
@@ -435,7 +434,7 @@ void printAllPositions(WorkersData* data) {
             char* current_pos = data->workers[i].contracts[k].position;
             int found = 0;
 
-            for (int j = 0; j < stats_count; j++) {
+            for (int j = 0; j < *stats_count; j++) {
                 if (strcmp(stats[j].position_name, current_pos) == 0) {
                     stats[j].avg_salary = (stats[j].avg_salary * stats[j].count +
                         data->workers[i].contracts[k].monthly_salary) /
@@ -447,27 +446,48 @@ void printAllPositions(WorkersData* data) {
             }
 
             if (!found) {
-                if (stats_count >= stats_capacity) {
+                if (*stats_count >= stats_capacity) {
                     stats_capacity *= 2;
                     PositionStats* temp = (PositionStats*)realloc(stats,
                         stats_capacity * sizeof(PositionStats));
                     if (temp == NULL) {
                         printf("Ошибка перераспределения памяти!\n");
+                        // Освобождаем уже выделенную память перед выходом
+                        for (int m = 0; m < *stats_count; m++) {
+                            free(stats[m].position_name);
+                        }
                         free(stats);
-                        return;
+                        return NULL;
                     }
                     stats = temp;
                 }
 
-                stats[stats_count].position_name = _strdup(current_pos);
-                stats[stats_count].avg_salary = data->workers[i].contracts[k].monthly_salary;
-                stats[stats_count].count = 1;
-                stats_count++;
+                stats[*stats_count].position_name = _strdup(current_pos);
+                if (stats[*stats_count].position_name == NULL) {
+                    printf("Ошибка выделения памяти для названия должности!\n");
+                    // Освобождаем уже выделенную память перед выходом
+                    for (int m = 0; m < *stats_count; m++) {
+                        free(stats[m].position_name);
+                    }
+                    free(stats);
+                    return NULL;
+                }
+                stats[*stats_count].avg_salary = data->workers[i].contracts[k].monthly_salary;
+                stats[*stats_count].count = 1;
+                (*stats_count)++;
             }
         }
     }
 
-    qsort(stats, stats_count, sizeof(PositionStats), comparePositions);
+    qsort(stats, *stats_count, sizeof(PositionStats), comparePositions);
+    return stats;
+}
+
+void printPositionsStats(PositionStats* stats, int stats_count) {
+    if (stats == NULL || stats_count == 0) {
+        printf("Нет данных для отображения!\n");
+        return;
+    }
 
     printf("\n=== Все должности (%d) ===\n", stats_count);
     printf("%-30s %-15s %-10s\n", "Должность", "Средняя зарплата", "Кол-во");
@@ -480,11 +500,6 @@ void printAllPositions(WorkersData* data) {
             stats[i].count);
     }
     printf("================================================\n");
-
-    for (int i = 0; i < stats_count; i++) {
-        free(stats[i].position_name);
-    }
-    free(stats);
 }
 
 void positionsMenu(WorkersData* data) {
@@ -493,7 +508,17 @@ void positionsMenu(WorkersData* data) {
         return;
     }
 
-    printAllPositions(data);
+    int stats_count = 0;
+    PositionStats* stats = createPositionsStats(data, &stats_count);
+    if (stats != NULL) {
+        printPositionsStats(stats, stats_count);
+
+        // Освобождаем память
+        for (int i = 0; i < stats_count; i++) {
+            free(stats[i].position_name);
+        }
+        free(stats);
+    }
 }
 
 void showMenu() {
