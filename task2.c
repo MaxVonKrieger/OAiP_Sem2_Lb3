@@ -3,8 +3,47 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
-#include "task2.h"
+#include <stdbool.h>
+#include <ctype.h>
 
+// Структуры данных
+typedef struct {
+    int day;
+    int month;
+    int year;
+} Date;
+
+typedef struct {
+    char* position_name;
+    float avg_salary;
+    int count;
+} PositionStats;
+
+typedef struct {
+    char* position;
+    float rate;
+    int monthly_salary;
+    Date start_date;
+    Date end_date;
+} Contract;
+
+typedef struct {
+    char* full_name;
+    Date birth_date;
+    int personnel_number;
+    Contract* contracts;
+    int contracts_count;
+    int contracts_capacity;
+} Worker;
+
+typedef struct {
+    Worker* workers;
+    int workers_count;
+    int workers_capacity;
+} WorkersData;
+
+
+// Основные функции
 void InsertStr(char** mas) {
     char a;
     int i = 0;
@@ -80,13 +119,13 @@ Date createDate() {
 
 Contract createContract() {
     Contract result;
+    result.position = NULL;
 
     printf("\nВведите должность: ");
     InsertStr(&result.position);
 
     do {
         printf("\nВведите ставку (0.1-10.0): ");
-        printf("\n");
         result.rate = floatchar();
     } while (result.rate < 0.1f || result.rate > 10.0f);
 
@@ -109,36 +148,48 @@ Contract createContract() {
     return result;
 }
 
-void freeWorker(Worker* worker) {
-    if (worker == NULL) return;
-
-    if (worker->full_name != NULL) {
-        free(worker->full_name);
-        worker->full_name = NULL;
-    }
-
-    if (worker->contract.position != NULL) {
-        free(worker->contract.position);
-        worker->contract.position = NULL;
+void initContracts(Worker* worker) {
+    worker->contracts_capacity = 2;
+    worker->contracts_count = 0;
+    worker->contracts = (Contract*)malloc(worker->contracts_capacity * sizeof(Contract));
+    if (worker->contracts == NULL) {
+        printf("Ошибка выделения памяти для контрактов\n");
+        exit(EXIT_FAILURE);
     }
 }
 
-void printContract(Contract contract) {
-    printf("Должность: %s\n", contract.position);
-    printf("Ставка: %.2f\n", contract.rate);
-    printf("Зарплата: %d руб./мес.\n", contract.monthly_salary);
-    printf("Дата начала: ");
-    printDate(contract.start_date);
-    printf("\n");
-    printf("Дата окончания: ");
-    printDate(contract.end_date);
-    printf("\n");
+void addContractToWorker(Worker* worker, Contract contract) {
+    if (worker->contracts_count >= worker->contracts_capacity) {
+        worker->contracts_capacity *= 2;
+        Contract* temp = (Contract*)realloc(worker->contracts, worker->contracts_capacity * sizeof(Contract));
+        if (temp == NULL) {
+            printf("Ошибка перераспределения памяти для контрактов\n");
+            exit(EXIT_FAILURE);
+        }
+        worker->contracts = temp;
+    }
+    worker->contracts[worker->contracts_count] = contract;
+    worker->contracts_count++;
+}
+
+void freeContracts(Worker* worker) {
+    if (worker->contracts != NULL) {
+        for (int i = 0; i < worker->contracts_count; i++) {
+            if (worker->contracts[i].position != NULL) {
+                free(worker->contracts[i].position);
+            }
+        }
+        free(worker->contracts);
+        worker->contracts = NULL;
+    }
+    worker->contracts_count = 0;
+    worker->contracts_capacity = 0;
 }
 
 Worker createWorker(Worker* existing_workers, int workers_count) {
     Worker result;
     result.full_name = NULL;
-    result.contract.position = NULL;
+    initContracts(&result);
 
     printf("\nВведите ФИО работника: ");
     InsertStr(&result.full_name);
@@ -149,8 +200,7 @@ Worker createWorker(Worker* existing_workers, int workers_count) {
     // Ввод табельного номера с проверкой на уникальность
     int is_unique;
     do {
-        is_unique = 1; // Предполагаем, что номер уникален
-
+        is_unique = 1;
         printf("\nВведите табельный номер (уникальное число > 0): ");
         result.personnel_number = intchar();
 
@@ -159,7 +209,6 @@ Worker createWorker(Worker* existing_workers, int workers_count) {
             continue;
         }
 
-        // Проверяем уникальность номера среди существующих работников
         for (int i = 0; i < workers_count; i++) {
             if (existing_workers[i].personnel_number == result.personnel_number) {
                 printf("Ошибка: работник с табельным номером %d уже существует!\n",
@@ -174,10 +223,37 @@ Worker createWorker(Worker* existing_workers, int workers_count) {
         }
     } while (result.personnel_number <= 0 || !is_unique);
 
-    printf("\nВвод данных контракта:\n");
-    result.contract = createContract();
+    // Ввод контрактов
+    char add_more;
+    do {
+        printf("\nВвод данных контракта #%d:\n", result.contracts_count + 1);
+        Contract new_contract = createContract();
+        addContractToWorker(&result, new_contract);
+
+        if (result.contracts_count < 10) {
+            printf("\nДобавить еще один контракт для этого работника? (y/n): ");
+            add_more = _getch();
+            printf("%c\n", add_more);
+        }
+        else {
+            printf("\nДостигнуто максимальное количество контрактов (10)\n");
+            add_more = 'n';
+        }
+    } while ((add_more == 'y' || add_more == 'Y') && result.contracts_count < 10);
 
     return result;
+}
+
+void printContract(Contract contract) {
+    printf("Должность: %s\n", contract.position);
+    printf("Ставка: %.2f\n", contract.rate);
+    printf("Зарплата: %d руб./мес.\n", contract.monthly_salary);
+    printf("Дата начала: ");
+    printDate(contract.start_date);
+    printf("\n");
+    printf("Дата окончания: ");
+    printDate(contract.end_date);
+    printf("\n");
 }
 
 void printWorker(const Worker worker) {
@@ -187,9 +263,24 @@ void printWorker(const Worker worker) {
     printDate(worker.birth_date);
     printf("\n");
     printf("Табельный номер: %d\n", worker.personnel_number);
-    printf("\n--- Данные контракта ---\n");
-    printContract(worker.contract);
+
+    printf("\n--- Данные контрактов (%d) ---\n", worker.contracts_count);
+    for (int i = 0; i < worker.contracts_count; i++) {
+        printf("\nКонтракт #%d:\n", i + 1);
+        printContract(worker.contracts[i]);
+    }
     printf("===========================\n");
+}
+
+void freeWorker(Worker* worker) {
+    if (worker == NULL) return;
+
+    if (worker->full_name != NULL) {
+        free(worker->full_name);
+        worker->full_name = NULL;
+    }
+
+    freeContracts(worker);
 }
 
 void initWorkersData(WorkersData* data) {
@@ -203,7 +294,7 @@ void initWorkersData(WorkersData* data) {
 }
 
 void increaseWorkersCapacity(WorkersData* data) {
-    data->workers_capacity++;
+    data->workers_capacity *= 2;
     Worker* temp = (Worker*)realloc(data->workers, data->workers_capacity * sizeof(Worker));
     if (temp == NULL) {
         printf("Ошибка перераспределения памяти\n");
@@ -213,7 +304,6 @@ void increaseWorkersCapacity(WorkersData* data) {
 }
 
 void addWorkerMenu(WorkersData* data) {
-    // Проверяем и увеличиваем емкость при необходимости
     if (data->workers_count >= data->workers_capacity) {
         increaseWorkersCapacity(data);
         if (data->workers == NULL) {
@@ -222,24 +312,20 @@ void addWorkerMenu(WorkersData* data) {
         }
     }
 
-    // Создаем нового работника с проверкой уникальности номера
     Worker new_worker = createWorker(data->workers, data->workers_count);
 
-    // Проверяем, что создание прошло успешно (указатели не NULL)
-    if (new_worker.full_name == NULL || new_worker.contract.position == NULL) {
+    if (new_worker.full_name == NULL || new_worker.contracts_count == 0) {
         printf("Ошибка: не удалось создать работника!\n");
-        freeWorker(&new_worker); // Освобождаем частично созданного работника
+        freeWorker(&new_worker);
         return;
     }
 
-    // Добавляем работника в массив
     data->workers[data->workers_count] = new_worker;
     data->workers_count++;
 
-    printf("\nРаботник %s успешно добавлен! Табельный номер: %d\n",
-        new_worker.full_name, new_worker.personnel_number);
+    printf("\nРаботник %s успешно добавлен! Табельный номер: %d, контрактов: %d\n",
+        new_worker.full_name, new_worker.personnel_number, new_worker.contracts_count);
 }
-
 
 int removeWorker(WorkersData* data, int index) {
     if (index < 0 || index >= data->workers_count || data->workers == NULL) {
@@ -250,10 +336,7 @@ int removeWorker(WorkersData* data, int index) {
     freeWorker(&data->workers[index]);
 
     for (int i = index; i < data->workers_count - 1; i++) {
-        freeWorker(&data->workers[i]);
         data->workers[i] = data->workers[i + 1];
-        data->workers[i + 1].full_name = NULL;
-        data->workers[i + 1].contract.position = NULL;
     }
 
     data->workers_count--;
@@ -284,10 +367,10 @@ void removeWorkerMenu(WorkersData* data) {
 
     int index;
     do {
-        printf("\nВведите индекс работника для удаления (0-%d) или -1 для отмены: ", data->workers_count);
+        printf("\nВведите индекс работника для удаления (1-%d) или 0 для отмены: ", data->workers_count);
         index = intchar();
 
-        if (index == -1) {
+        if (index == 0) {
             printf("Удаление отменено.\n");
             return;
         }
@@ -346,38 +429,41 @@ void printAllPositions(WorkersData* data) {
         return;
     }
 
+    // Собираем статистику по всем контрактам всех работников
     for (int i = 0; i < data->workers_count; i++) {
-        char* current_pos = data->workers[i].contract.position;
-        int found = 0;
+        for (int k = 0; k < data->workers[i].contracts_count; k++) {
+            char* current_pos = data->workers[i].contracts[k].position;
+            int found = 0;
 
-        for (int j = 0; j < stats_count; j++) {
-            if (strcmp(stats[j].position_name, current_pos) == 0) {
-                stats[j].avg_salary = (stats[j].avg_salary * stats[j].count +
-                    data->workers[i].contract.monthly_salary) /
-                    (stats[j].count + 1);
-                stats[j].count++;
-                found = 1;
-                break;
-            }
-        }
-
-        if (!found) {
-            if (stats_count >= stats_capacity) {
-                stats_capacity *= 2;
-                PositionStats* temp = (PositionStats*)realloc(stats,
-                    stats_capacity * sizeof(PositionStats));
-                if (temp == NULL) {
-                    printf("Ошибка перераспределения памяти!\n");
-                    free(stats);
-                    return;
+            for (int j = 0; j < stats_count; j++) {
+                if (strcmp(stats[j].position_name, current_pos) == 0) {
+                    stats[j].avg_salary = (stats[j].avg_salary * stats[j].count +
+                        data->workers[i].contracts[k].monthly_salary) /
+                        (stats[j].count + 1);
+                    stats[j].count++;
+                    found = 1;
+                    break;
                 }
-                stats = temp;
             }
 
-            stats[stats_count].position_name = _strdup(current_pos);
-            stats[stats_count].avg_salary = data->workers[i].contract.monthly_salary;
-            stats[stats_count].count = 1;
-            stats_count++;
+            if (!found) {
+                if (stats_count >= stats_capacity) {
+                    stats_capacity *= 2;
+                    PositionStats* temp = (PositionStats*)realloc(stats,
+                        stats_capacity * sizeof(PositionStats));
+                    if (temp == NULL) {
+                        printf("Ошибка перераспределения памяти!\n");
+                        free(stats);
+                        return;
+                    }
+                    stats = temp;
+                }
+
+                stats[stats_count].position_name = _strdup(current_pos);
+                stats[stats_count].avg_salary = data->workers[i].contracts[k].monthly_salary;
+                stats[stats_count].count = 1;
+                stats_count++;
+            }
         }
     }
 
@@ -411,7 +497,34 @@ void positionsMenu(WorkersData* data) {
 }
 
 void showMenu() {
-    printf("\n1. Добавить\n2. Удалить\n3. Список\n4. Топ\n5. Удалить уволенных\n6. Сохранить в файл\n7. Загрузить из файла\n0. Выход\nВыбор: ");
+    printf("\n1. Добавить работника\n");
+    printf("2. Удалить работника\n");
+    printf("3. Показать всех работников\n");
+    printf("4. Топ должностей по зарплате\n");
+    printf("5. Удалить уволенных работников\n");
+    printf("6. Сохранить данные в файл\n");
+    printf("7. Загрузить данные из файла\n");
+    printf("0. Выход\n");
+    printf("Выбор: ");
+}
+
+char* trimWhitespace(char* str) {
+    if (str == NULL) return NULL;
+
+    char* end;
+
+    // Удаляем пробелы в начале
+    while (isspace((unsigned char)*str)) str++;
+
+    if (*str == 0) return str;
+
+    // Удаляем пробелы в конце
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end)) end--;
+
+    *(end + 1) = '\0';
+
+    return str;
 }
 
 void saveWorkersToFile(WorkersData* data, const char* filename) {
@@ -423,38 +536,29 @@ void saveWorkersToFile(WorkersData* data, const char* filename) {
 
     for (int i = 0; i < data->workers_count; i++) {
         Worker* worker = &data->workers[i];
-        Contract* contract = &worker->contract;
 
-        fprintf(file, "%s | %d | %d | %d | %d | %s | %.2f | %d | %d | %d | %d | %d | %d | %d\n",
+        // Записываем количество контрактов первым числом
+        fprintf(file, "%d | %s | %d | %d | %d | %d",
+            worker->contracts_count,
             worker->full_name,
             worker->birth_date.day, worker->birth_date.month, worker->birth_date.year,
-            worker->personnel_number,
-            contract->position,
-            contract->rate,
-            contract->monthly_salary,
-            contract->start_date.day, contract->start_date.month, contract->start_date.year,
-            contract->end_date.day, contract->end_date.month, contract->end_date.year);
+            worker->personnel_number);
+
+        // Записываем все контракты
+        for (int j = 0; j < worker->contracts_count; j++) {
+            Contract* contract = &worker->contracts[j];
+            fprintf(file, " | %s | %.2f | %d | %d | %d | %d | %d | %d | %d",
+                contract->position,
+                contract->rate,
+                contract->monthly_salary,
+                contract->start_date.day, contract->start_date.month, contract->start_date.year,
+                contract->end_date.day, contract->end_date.month, contract->end_date.year);
+        }
+        fprintf(file, "\n");
     }
 
     fclose(file);
     printf("Данные успешно сохранены в файл %s\n", filename);
-}
-
-char* trimWhitespace(char* str) {
-    if (str == NULL) return NULL;
-
-    char* end;
-
-    while (isspace((unsigned char)*str)) str++;
-
-    if (*str == 0) return str;
-
-    end = str + strlen(str) - 1;
-    while (end > str && isspace((unsigned char)*end)) end--;
-
-    *(end + 1) = '\0';
-
-    return str;
 }
 
 void loadWorkersFromFile(WorkersData* data, const char* filename) {
@@ -464,6 +568,7 @@ void loadWorkersFromFile(WorkersData* data, const char* filename) {
         return;
     }
 
+    // Очищаем текущие данные
     for (int i = 0; i < data->workers_count; i++) {
         freeWorker(&data->workers[i]);
     }
@@ -478,10 +583,10 @@ void loadWorkersFromFile(WorkersData* data, const char* filename) {
         return;
     }
 
-    char line[1024];
-    while (fgets(line, sizeof(line), file) != NULL) {
+    char line[4096]; // Большой буфер для чтения длинных строк с несколькими контрактами
+    while (fgets(line, sizeof(line), file)) {
         if (data->workers_count >= data->workers_capacity) {
-            data->workers_capacity++;
+            data->workers_capacity *= 2;
             Worker* temp = (Worker*)realloc(data->workers, data->workers_capacity * sizeof(Worker));
             if (temp == NULL) {
                 printf("Ошибка перераспределения памяти!\n");
@@ -492,39 +597,70 @@ void loadWorkersFromFile(WorkersData* data, const char* filename) {
 
         Worker* current = &data->workers[data->workers_count];
         current->full_name = NULL;
-        current->contract.position = NULL;
+        initContracts(current);
 
+        // Читаем количество контрактов
+        int contracts_count;
         char* token = strtok(line, "|");
         if (token == NULL) continue;
+        contracts_count = atoi(trimWhitespace(token));
 
-        token = trimWhitespace(token);
-        current->full_name = (char*)malloc(strlen(token) + 1);
-        strcpy(current->full_name, token);
+        // Читаем основные данные работника
+        token = strtok(NULL, "|");
+        current->full_name = (char*)malloc(strlen(trimWhitespace(token)) + 1);
+        strcpy(current->full_name, trimWhitespace(token));
 
         token = strtok(NULL, "|"); current->birth_date.day = atoi(trimWhitespace(token));
         token = strtok(NULL, "|"); current->birth_date.month = atoi(trimWhitespace(token));
         token = strtok(NULL, "|"); current->birth_date.year = atoi(trimWhitespace(token));
         token = strtok(NULL, "|"); current->personnel_number = atoi(trimWhitespace(token));
 
-        token = strtok(NULL, "|");
-        token = trimWhitespace(token);
-        current->contract.position = (char*)malloc(strlen(token) + 1);
-        strcpy(current->contract.position, token);
+        // Читаем контракты
+        for (int i = 0; i < contracts_count; i++) {
+            Contract contract;
+            contract.position = NULL;
 
-        token = strtok(NULL, "|"); current->contract.rate = atof(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.monthly_salary = atoi(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.start_date.day = atoi(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.start_date.month = atoi(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.start_date.year = atoi(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.end_date.day = atoi(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.end_date.month = atoi(trimWhitespace(token));
-        token = strtok(NULL, "|"); current->contract.end_date.year = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|");
+            if (token == NULL) break;
+            contract.position = (char*)malloc(strlen(trimWhitespace(token)) + 1);
+            strcpy(contract.position, trimWhitespace(token));
+
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.rate = atof(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.monthly_salary = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.start_date.day = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.start_date.month = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.start_date.year = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.end_date.day = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.end_date.month = atoi(trimWhitespace(token));
+            token = strtok(NULL, "|"); if (token == NULL) break; contract.end_date.year = atoi(trimWhitespace(token));
+
+            addContractToWorker(current, contract);
+        }
 
         data->workers_count++;
     }
 
     fclose(file);
     printf("Загружено %d работников из файла.\n", data->workers_count);
+}
+
+int isWorkerDismissed(Worker* worker, Date current_date) {
+    // Если у работника нет контрактов, считаем его уволенным
+    if (worker->contracts_count == 0) {
+        return 1;
+    }
+
+    // Проверяем все контракты работника
+    for (int i = 0; i < worker->contracts_count; i++) {
+        // Если текущая дата находится в периоде действия хотя бы одного контракта,
+        // работник не считается уволенным
+        if (compareDates(current_date, worker->contracts[i].start_date) >= 0 &&
+            compareDates(current_date, worker->contracts[i].end_date) <= 0) {
+            return 0;
+        }
+    }
+    // Если ни один контракт не покрывает текущую дату, работник уволен
+    return 1;
 }
 
 void removeDismissedWorkers(WorkersData* data, Date current_date) {
@@ -536,13 +672,8 @@ void removeDismissedWorkers(WorkersData* data, Date current_date) {
     int removed_count = 0;
 
     for (int i = data->workers_count - 1; i >= 0; i--) {
-        if (compareDates(data->workers[i].contract.end_date, current_date) < 0) {
-            printf("Удаляем уволенного работника: %s (контракт закончился %02d.%02d.%04d)\n",
-                data->workers[i].full_name,
-                data->workers[i].contract.end_date.day,
-                data->workers[i].contract.end_date.month,
-                data->workers[i].contract.end_date.year);
-
+        if (isWorkerDismissed(&data->workers[i], current_date)) {
+            printf("Удаляем уволенного работника: %s\n", data->workers[i].full_name);
             if (removeWorker(data, i)) {
                 removed_count++;
             }
@@ -581,20 +712,16 @@ void freeWorkersData(WorkersData* data) {
     data->workers_capacity = 0;
 }
 
-
-
-void workerStruct(const char argv)
-{
+void workerStruct(const char argv) {
     int exit_submenu = 0;
     WorkersData workers_data;
     initWorkersData(&workers_data);
-    do
-    {
-        exit_submenu = 0;
+
+    do {
         showMenu();
         int answer = intchar();
-        switch (answer)
-        {
+
+        switch (answer) {
         case 1:
             addWorkerMenu(&workers_data);
             break;
@@ -624,6 +751,12 @@ void workerStruct(const char argv)
             printf("Неверный выбор!\n");
             break;
         }
+
+        /*if (!exit_submenu) {
+            printf("\nНажмите любую клавишу для продолжения...");
+            _getch();
+        }*/
     } while (!exit_submenu);
+
     freeWorkersData(&workers_data);
 }
