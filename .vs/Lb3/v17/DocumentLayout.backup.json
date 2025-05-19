@@ -48,7 +48,7 @@
               "RelativeDocumentMoniker": "task2.h",
               "ToolTip": "D:\\source\\Lb3\\task2.h",
               "RelativeToolTip": "task2.h",
-              "ViewState": "AgIAADAAAAAAAAAAAAAAADcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-04-23T17:31:12.823Z",
               "EditorCaption": ""
@@ -97,7 +97,7 @@
               "RelativeDocumentMoniker": "task2.c",
               "ToolTip": "D:\\source\\Lb3\\task2.c",
               "RelativeToolTip": "task2.c",
-              "ViewState": "AgIAAJoBAAAAAAAAAAAgwKABAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAPcCAAAAAAAAAAAgwPgCAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-04-23T17:30:12.577Z",
               "EditorCaption": ""
@@ -122,9 +122,10 @@
               "RelativeDocumentMoniker": "Main.c",
               "ToolTip": "D:\\source\\Lb3\\Main.c",
               "RelativeToolTip": "Main.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAACYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-04-23T17:29:38.994Z"
+              "WhenOpened": "2025-04-23T17:29:38.994Z",
+              "EditorCaption": ""
             }
           ]
         }

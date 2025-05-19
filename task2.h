@@ -1,4 +1,11 @@
 #pragma once
+typedef enum {
+    FULL_TIME,      // Полная занятость
+    PART_TIME,      // Частичная занятость
+    CONTRACTOR,     // Внешний сотрудник
+    INTERN          // Стажер
+} EmploymentType;
+
 typedef struct {
     int day;
     int month;
@@ -23,7 +30,10 @@ typedef struct {
     char* full_name;
     Date birth_date;
     int personnel_number;
-    Contract contract;
+    EmploymentType employment_type;
+    Contract* contracts;
+    int contracts_count;
+    int contracts_capacity;
 } Worker;
 
 typedef struct {
@@ -51,8 +61,9 @@ int removeWorker(WorkersData* data, int index);
 void printAllWorkers(WorkersData* data);
 void removeWorkerMenu(WorkersData* data);
 int comparePositions(const void* a, const void* b);
-void printPositionsStats(PositionStats* stats, int stats_count);
 PositionStats* createPositionsStats(WorkersData* data, int* stats_count);
+void printPositionsStats(PositionStats* stats, int stats_count);
+void positionsMenu(WorkersData* data);
 void showMenu(void);
 void saveWorkersToFile(WorkersData* data, const char* filename);
 char* trimWhitespace(char* str);
@@ -62,3 +73,6 @@ void removeDismissedWorkers(WorkersData* data, Date current_date);
 void removeDismissedMenu(WorkersData* data);
 void freeWorkersData(WorkersData* data);
 void workerStruct(const char argv);
+int intchar(void);
+float floatchar(void);
+const char* employmentTypeToString(EmploymentType type);

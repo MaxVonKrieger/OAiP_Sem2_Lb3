@@ -3,47 +3,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
-#include <stdbool.h>
+#include "task2.h"
 #include <ctype.h>
 
-// Структуры данных
-typedef struct {
-    int day;
-    int month;
-    int year;
-} Date;
 
-typedef struct {
-    char* position_name;
-    float avg_salary;
-    int count;
-} PositionStats;
+const char* employmentTypeToString(EmploymentType type) {
+    switch (type) {
+    case FULL_TIME: return "Полная занятость";
+    case PART_TIME: return "Частичная занятость";
+    case CONTRACTOR: return "Внешний сотрудник";
+    case INTERN: return "Стажер";
+    default: return "Неизвестный тип";
+    }
+}
 
-typedef struct {
-    char* position;
-    float rate;
-    int monthly_salary;
-    Date start_date;
-    Date end_date;
-} Contract;
-
-typedef struct {
-    char* full_name;
-    Date birth_date;
-    int personnel_number;
-    Contract* contracts;
-    int contracts_count;
-    int contracts_capacity;
-} Worker;
-
-typedef struct {
-    Worker* workers;
-    int workers_count;
-    int workers_capacity;
-} WorkersData;
-
-
-// Основные функции
 void InsertStr(char** mas) {
     char a;
     int i = 0;
@@ -197,6 +170,24 @@ Worker createWorker(Worker* existing_workers, int workers_count) {
     printf("\nДата рождения работника:\n");
     result.birth_date = createDate();
 
+    // Ввод типа занятости
+    printf("\nВыберите тип занятости:\n");
+    printf("1. Полная занятость\n");
+    printf("2. Частичная занятость\n");
+    printf("3. Внешний сотрудник\n");
+    printf("4. Стажер\n");
+    printf("Выбор: ");
+
+    int type_choice;
+    do {
+        type_choice = intchar();
+        if (type_choice < 1 || type_choice > 4) {
+            printf("Неверный выбор! Введите число от 1 до 4: ");
+        }
+    } while (type_choice < 1 || type_choice > 4);
+
+    result.employment_type = (EmploymentType)(type_choice - 1);
+
     // Ввод табельного номера с проверкой на уникальность
     int is_unique;
     do {
@@ -263,6 +254,7 @@ void printWorker(const Worker worker) {
     printDate(worker.birth_date);
     printf("\n");
     printf("Табельный номер: %d\n", worker.personnel_number);
+    printf("Тип занятости: %s\n", employmentTypeToString(worker.employment_type));
 
     printf("\n--- Данные контрактов (%d) ---\n", worker.contracts_count);
     for (int i = 0; i < worker.contracts_count; i++) {
@@ -563,11 +555,12 @@ void saveWorkersToFile(WorkersData* data, const char* filename) {
         Worker* worker = &data->workers[i];
 
         // Записываем количество контрактов первым числом
-        fprintf(file, "%d | %s | %d | %d | %d | %d",
+        fprintf(file, "%d | %s | %d | %d | %d | %d | %d",
             worker->contracts_count,
             worker->full_name,
             worker->birth_date.day, worker->birth_date.month, worker->birth_date.year,
-            worker->personnel_number);
+            worker->personnel_number,
+            worker->employment_type);  // Сохраняем тип занятости
 
         // Записываем все контракты
         for (int j = 0; j < worker->contracts_count; j++) {
@@ -639,6 +632,7 @@ void loadWorkersFromFile(WorkersData* data, const char* filename) {
         token = strtok(NULL, "|"); current->birth_date.month = atoi(trimWhitespace(token));
         token = strtok(NULL, "|"); current->birth_date.year = atoi(trimWhitespace(token));
         token = strtok(NULL, "|"); current->personnel_number = atoi(trimWhitespace(token));
+        token = strtok(NULL, "|"); current->employment_type = (EmploymentType)atoi(trimWhitespace(token));
 
         // Читаем контракты
         for (int i = 0; i < contracts_count; i++) {

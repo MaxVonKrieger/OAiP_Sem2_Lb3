@@ -1,15 +1,15 @@
-3 | John Smith | 15 | 5 | 1985 | 1001 | Senior Developer | 1.5 | 150000 | 10 | 1 | 2020 | 9 | 12 | 2023 | Team Lead | 1.8 | 180000 | 1 | 1 | 2023 | 31 | 12 | 2025 | Project Manager | 2.0 | 200000 | 1 | 1 | 2024 | 31 | 12 | 2026
-2 | Emily Johnson | 22 | 7 | 1990 | 1002 | Data Analyst | 1.2 | 120000 | 1 | 3 | 2021 | 31 | 12 | 2023 | Senior Data Analyst | 1.5 | 150000 | 1 | 1 | 2024 | 31 | 12 | 2025
-1 | Michael Brown | 10 | 9 | 1982 | 1003 | System Administrator | 1.3 | 130000 | 15 | 6 | 2019 | 14 | 6 | 2024
-2 | Sarah Davis | 3 | 11 | 1992 | 1004 | UX Designer | 1.4 | 140000 | 1 | 2 | 2022 | 31 | 1 | 2024 | Senior UX Designer | 1.7 | 170000 | 1 | 2 | 2024 | 31 | 1 | 2026
-1 | Robert Wilson | 19 | 4 | 1988 | 1005 | DevOps Engineer | 1.6 | 160000 | 1 | 5 | 2021 | 30 | 4 | 2025
-3 | Jennifer Miller | 25 | 12 | 1991 | 1006 | Junior Developer | 1.0 | 100000 | 1 | 7 | 2020 | 30 | 6 | 2022 | Middle Developer | 1.3 | 130000 | 1 | 7 | 2022 | 30 | 6 | 2024 | Senior Developer | 1.6 | 160000 | 1 | 7 | 2024 | 30 | 6 | 2026
-1 | David Taylor | 8 | 2 | 1987 | 1007 | QA Engineer | 1.2 | 120000 | 1 | 9 | 2021 | 31 | 8 | 2024
-2 | Jessica Anderson | 14 | 3 | 1993 | 1008 | Marketing Specialist | 1.1 | 110000 | 1 | 4 | 2022 | 31 | 3 | 2024 | Marketing Manager | 1.4 | 140000 | 1 | 4 | 2024 | 31 | 3 | 2026
-1 | Christopher Thomas | 30 | 8 | 1984 | 1009 | Network Engineer | 1.5 | 150000 | 1 | 10 | 2020 | 29 | 8 | 2025
-2 | Elizabeth Jackson | 5 | 1 | 1990 | 1010 | HR Specialist | 1.0 | 100000 | 1 | 1 | 2022 | 31 | 12 | 2023 | HR Manager | 1.3 | 130000 | 1 | 1 | 2024 | 31 | 12 | 2026
-1 | Matthew White | 17 | 6 | 1989 | 1011 | Database Administrator | 1.4 | 140000 | 15 | 9 | 2021 | 14 | 9 | 2024
-3 | Daniel Harris | 12 | 10 | 1986 | 1012 | Junior Analyst | 0.8 | 80000 | 1 | 1 | 2020 | 31 | 12 | 2021 | Middle Analyst | 1.1 | 110000 | 1 | 2 | 2022 | 31 | 12 | 2023 | Senior Analyst | 1.4 | 140000 | 1 | 1 | 2024 | 31 | 12 | 2026
-1 | Olivia Martin | 23 | 4 | 1994 | 1013 | Content Manager | 1.1 | 110000 | 1 | 5 | 2022 | 30 | 4 | 2025
-2 | Andrew Thompson | 7 | 7 | 1983 | 1014 | System Architect | 1.9 | 190000 | 1 | 1 | 2020 | 31 | 12 | 2023 | Senior System Architect | 2.2 | 220000 | 1 | 1 | 2024 | 31 | 12 | 2027
-1 | Sophia Garcia | 29 | 11 | 1991 | 1015 | Product Owner | 1.7 | 170000 | 1 | 3 | 2021 | 28 | 2 | 2025
+3 | John Smith | 15 | 5 | 1980 | 1001 | 0 | Manager | 1.00 | 50000 | 1 | 1 | 2020 | 31 | 12 | 2025 | Senior Developer | 1.00 | 40000 | 1 | 1 | 2020 | 31 | 12 | 2023 | Junior Developer | 0.75 | 30000 | 1 | 1 | 2020 | 31 | 12 | 2021
+1 | Emily Johnson | 22 | 7 | 1985 | 1002 | 0 | HR Director | 1.00 | 45000 | 1 | 6 | 2019 | 31 | 12 | 2024
+2 | Michael Brown | 10 | 3 | 1990 | 1003 | 1 | Software Engineer | 1.00 | 42000 | 1 | 1 | 2021 | 31 | 12 | 2023 | Team Lead | 1.00 | 48000 | 1 | 1 | 2023 | 31 | 12 | 2025
+1 | Sarah Wilson | 5 | 9 | 1992 | 1004 | 2 | Consultant | 0.50 | 25000 | 1 | 3 | 2022 | 31 | 12 | 2023
+1 | David Lee | 18 | 11 | 1988 | 1005 | 0 | CFO | 1.00 | 60000 | 1 | 1 | 2018 | 31 | 12 | 2025
+2 | Jennifer Davis | 25 | 2 | 1991 | 1006 | 0 | Marketing Manager | 1.00 | 38000 | 1 | 1 | 2020 | 31 | 12 | 2022 | Product Manager | 1.00 | 45000 | 1 | 1 | 2022 | 31 | 12 | 2024
+1 | Robert Miller | 12 | 4 | 1987 | 1007 | 3 | Intern | 0.25 | 10000 | 1 | 6 | 2023 | 31 | 12 | 2023
+1 | Jessica Wilson | 30 | 8 | 1993 | 1008 | 1 | UX Designer | 0.80 | 32000 | 1 | 1 | 2021 | 31 | 12 | 2023
+3 | William Taylor | 14 | 1 | 1985 | 1009 | 0 | CTO | 1.00 | 55000 | 1 | 1 | 2019 | 31 | 12 | 2025 | Developer | 1.00 | 40000 | 1 | 1 | 2017 | 31 | 12 | 2019 | Architect | 1.00 | 50000 | 1 | 1 | 2019 | 31 | 12 | 2021
+1 | Olivia Anderson | 7 | 12 | 1990 | 1010 | 0 | Sales Manager | 1.00 | 35000 | 1 | 1 | 2022 | 31 | 12 | 2024
+2 | James Thomas | 19 | 6 | 1989 | 1011 | 0 | QA Engineer | 1.00 | 38000 | 1 | 1 | 2021 | 31 | 12 | 2023 | QA Lead | 1.00 | 45000 | 1 | 1 | 2023 | 31 | 12 | 2025
+1 | Sophia White | 3 | 10 | 1994 | 1012 | 3 | Intern | 0.30 | 12000 | 1 | 6 | 2023 | 31 | 12 | 2023
+1 | Daniel Harris | 28 | 2 | 1986 | 1013 | 2 | Contractor | 0.60 | 30000 | 1 | 3 | 2022 | 31 | 12 | 2023
+2 | Ava Martin | 15 | 7 | 1991 | 1014 | 0 | Data Analyst | 1.00 | 42000 | 1 | 1 | 2021 | 31 | 12 | 2023 | Data Scientist | 1.00 | 48000 | 1 | 1 | 2023 | 31 | 12 | 2025
+1 | Matthew Thompson | 22 | 4 | 1988 | 1015 | 0 | DevOps Engineer | 1.00 | 47000 | 1 | 1 | 2020 | 31 | 12 | 2025
