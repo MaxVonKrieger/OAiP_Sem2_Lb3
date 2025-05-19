@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "D:\\source\\Lb3\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\Main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|solutionrelative:Main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\func_general.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|solutionrelative:func_general.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\task2.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|solutionrelative:task2.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\task2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|solutionrelative:task2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\Main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|solutionrelative:Main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\func_general.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|solutionrelative:func_general.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{52AD2F0D-4A51-4388-808B-FEA0B85F4141}|Lb3.vcxproj|D:\\source\\Lb3\\func_general.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -38,19 +38,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "task2.h",
               "DocumentMoniker": "D:\\source\\Lb3\\task2.h",
               "RelativeDocumentMoniker": "task2.h",
               "ToolTip": "D:\\source\\Lb3\\task2.h",
               "RelativeToolTip": "task2.h",
-              "ViewState": "AgIAACIAAAAAAAAAAAAgwDEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAAgwDQAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-04-23T17:31:12.823Z"
+              "WhenOpened": "2025-04-23T17:31:12.823Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -78,7 +79,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "func_general.c",
               "DocumentMoniker": "D:\\source\\Lb3\\func_general.c",
               "RelativeDocumentMoniker": "func_general.c",
@@ -86,20 +87,20 @@
               "RelativeToolTip": "func_general.c",
               "ViewState": "AgIAACEAAAAAAAAAAAAAABgAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-04-23T17:30:30.855Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T17:30:30.855Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "task2.c",
               "DocumentMoniker": "D:\\source\\Lb3\\task2.c",
               "RelativeDocumentMoniker": "task2.c",
               "ToolTip": "D:\\source\\Lb3\\task2.c",
               "RelativeToolTip": "task2.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAALUBAABmAAAAAAAAAA==",
+              "ViewState": "AgIAAEoCAAAAAAAAAAAgwGkCAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-04-23T17:30:12.577Z"
+              "WhenOpened": "2025-04-23T17:30:12.577Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -115,13 +116,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Main.c",
               "DocumentMoniker": "D:\\source\\Lb3\\Main.c",
               "RelativeDocumentMoniker": "Main.c",
               "ToolTip": "D:\\source\\Lb3\\Main.c",
               "RelativeToolTip": "Main.c",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACMAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-04-23T17:29:38.994Z",
               "EditorCaption": ""

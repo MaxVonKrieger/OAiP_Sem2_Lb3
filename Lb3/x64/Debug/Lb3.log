@@ -1,3 +1,12 @@
 ﻿  Main.c
-D:\source\Lb3\Main.c(54,21): warning C4013: removeDismissedMenu: нет определения; предполагается "extern" с возвратом типа "int"
+D:\source\Lb3\Main.c(34,30): warning C4047: функция: "const char" отличается по уровням косвенного обращения от "const char *"
+D:\source\Lb3\Main.c(34,30): warning C4024: workerStruct: различные типы для формального и фактического параметров 1
+  task2.c
+D:\source\Lb3\task2.c(64,22): warning C4013: intchar: нет определения; предполагается "extern" с возвратом типа "int"
+D:\source\Lb3\task2.c(90,23): warning C4013: floatchar: нет определения; предполагается "extern" с возвратом типа "int"
+D:\source\Lb3\task2.c(90,23): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+D:\source\Lb3\task2.c(378,70): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+D:\source\Lb3\task2.c(448,12): warning C4013: isspace: нет определения; предполагается "extern" с возвратом типа "int"
+D:\source\Lb3\task2.c(514,61): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  Создание кода...
   Lb3.vcxproj -> D:\source\Lb3\x64\Debug\Lb3.exe

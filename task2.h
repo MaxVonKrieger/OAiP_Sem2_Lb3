@@ -26,27 +26,35 @@ typedef struct {
     Contract contract;
 } Worker;
 
+typedef struct {
+    Worker* workers;
+    int workers_count;
+    int workers_capacity;
+} WorkersData;
 
 void InsertStr(char** mas);
 void printDate(const Date date);
 int compareDates(Date date1, Date date2);
-Date createDate();
+Date createDate(void);
+Contract createContract(void);
 void freeWorker(Worker* worker);
 void printContract(Contract contract);
-Worker createWorker();
+Worker createWorker(Worker* existing_workers, int workers_count);
 void printWorker(const Worker worker);
-int isWorkersFull();
-void increaseWorkers();
-void addWorkerMenu();
-int removeWorker(int index);
-void printAllWorkers();
-void removeWorkerMenu();
+void initWorkersData(WorkersData* data);
+void increaseWorkersCapacity(WorkersData* data);
+void addWorkerMenu(WorkersData* data);
+int removeWorker(WorkersData* data, int index);
+void printAllWorkers(WorkersData* data);
+void removeWorkerMenu(WorkersData* data);
 int comparePositions(const void* a, const void* b);
-void printAllPositions();
-void positionsMenu();
-void saveWorkersToFile();
+void printAllPositions(WorkersData* data);
+void positionsMenu(WorkersData* data);
+void showMenu(void);
+void saveWorkersToFile(WorkersData* data, const char* filename);
 char* trimWhitespace(char* str);
-void loadWorkersFromFile();
-
-void showMenu();
-
+void loadWorkersFromFile(WorkersData* data, const char* filename);
+void removeDismissedWorkers(WorkersData* data, Date current_date);
+void removeDismissedMenu(WorkersData* data);
+void freeWorkersData(WorkersData* data);
+void workerStruct(const char argv);
